@@ -26,7 +26,7 @@ global.fetch = vi.fn((url, options) => {
 test('Claims Intake: Submitting a patient form should display a success alert banner', async () => {
   render(<App />);
 
-  // 🌟 FIX: Find the intake fields precisely by searching for their bold form Labels!
+  // Find the intake fields precisely by searching for their form Labels
   fireEvent.change(screen.getByLabelText(/Patient Identifier/i), { target: { value: 'patient_esosa' } });
   fireEvent.change(screen.getByLabelText(/Social Security Number \(SSN\)/i), { target: { value: '777-88-9999' } });
   fireEvent.change(screen.getByLabelText(/Billing Claim Amount \(\$\)/i), { target: { value: '450' } });
@@ -34,8 +34,8 @@ test('Claims Intake: Submitting a patient form should display a success alert ba
   // Click the dispatch button
   fireEvent.click(screen.getByText(/Encrypt & Dispatch Claim/i));
 
-  // Verify the happy success message appears safely
-  const banner = await screen.findByText(/SUCCESS:/i);
+  // 🌟 FIX: Hunt for our crisp corporate 'RECO_LOG' prefix text banner!
+  const banner = await screen.findByText(/RECO_LOG:/i);
   expect(banner).toBeInTheDocument();
 });
 

@@ -50,3 +50,25 @@ test('HIPAA Authorization Check: Authorized users must be allowed to decrypt pat
   expect(response.status).toBe(200);
   expect(response.body.patientSSN).toBe('999-88-7777'); // 🛡️ Restored perfectly for authorized eyes!
 });
+
+test('EDI Integration Portal Check: End-to-end lookup and translation to ANSI X12 binary strings', async () => {
+  // 1. Arrange: Intake a fresh valid claim inside the system
+  await request(app)
+    .post('/api/claims')
+    .send({
+      patientId: 'PATIENT_EDI_99',
+      patientSSN: '222-33-4444',
+      diagnosisCode: 'E11.9',
+      billingAmount: 500
+    });
+
+  // 2. Act: Trigger our brand new EDI translation compiler gate slot
+  const response = await request(app)
+    .post('/api/claims/compile-edi')
+    .send({ patientId: 'PATIENT_EDI_99' });
+
+  // 3. Assert: Verify the gate returns a pristine 200 OK status and standard X12 formatting segments!
+  expect(response.status).toBe(200);
+  expect(response.body.message).toBe('Claim translated into standard EDI X12 837 compliance format!');
+  expect(response.body.ediOutput).toBe('CLM*PATIENT_EDI_99*500***11:B:1*Y*A*Y*I*HI*BK:E11.9~');
+});
