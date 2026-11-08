@@ -1,0 +1,14 @@
+# 📦 Ignore heavy toolboxes
+node_modules/
+backend/node_modules/
+frontend/node_modules/
+
+# 🎨 Ignore compiled build assets (Backend hosts them dynamically now)
+frontend/dist/
+
+# 💾 Ignore live local database state changes
+backend/medledgerVault.db
+
+# OS configs
+.DS_Store
+Thumbs.db
